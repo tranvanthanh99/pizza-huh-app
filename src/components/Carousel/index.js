@@ -13,29 +13,29 @@ const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
 const tutorialSteps = [
     {
+        label: 'NeONBRAND Digital Marketing, Las Vegas, United States',
+        imgPath:
+            'https://a-static.besthdwallpaper.com/pan-pizza-papel-pintado-1920x1080-3212_48.jpg',
+    },
+    {
         label: 'San Francisco – Oakland Bay Bridge, United States',
         imgPath:
-            'https://dominos.vn/Data/Sites/1/Banner/1920x810-homepage-pc-1.png',
+            'https://i.ytimg.com/vi/bBsZp8tB-EI/maxresdefault.jpg',
     },
     {
         label: 'Bird',
         imgPath:
-            'https://dominos.vn/Data/Sites/1/Banner/tang-1-pizza-12-website-vn-1920-x-810.jpg',
+            'https://i.ytimg.com/vi/JKCRwmeVxSs/maxresdefault.jpg',
     },
     {
         label: 'Bali, Indonesia',
         imgPath:
-            'https://dominos.vn/Data/Sites/1/Banner/bogo-03.jpg',
-    },
-    {
-        label: 'NeONBRAND Digital Marketing, Las Vegas, United States',
-        imgPath:
-            'https://dominos.vn/Data/Sites/1/Banner/21desktop-(2).jpg',
+            'https://i.ytimg.com/vi/IUYE6KhBvNY/maxresdefault.jpg',
     },
     {
         label: 'Goč, Serbia',
         imgPath:
-            'https://dominos.vn/Data/Sites/1/Banner/tang-1-pizza-12-website-vn-1920-x-810.jpg',
+            'https://www.nyitalianexpressristorante.com/wp-content/uploads/2019/04/image7.jpg',
     },
 ];
 
