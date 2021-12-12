@@ -1,0 +1,31 @@
+.product {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px dotted rgba(0,0,0,.1);
+}
+
+#standard-number {
+  text-align: center;
+}
+
+/* width */
+.cart-body::-webkit-scrollbar {
+    width: 5px;
+    background: #d9d9d9;
+  }
+  
+  /* Track */
+.cart-body::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  /* Handle */
+.cart-body::-webkit-scrollbar-thumb {
+    background: #8f8e8e;
+    border-radius: 3px;
+  }
+  
+  /* Handle on hover */
+.cart-body::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }

@@ -1,0 +1,60 @@
+@media (max-width: 992px) {
+    .item-category{
+        font-size: 1.5rem!important;
+    }
+    .product-img {
+        max-width: 250px!important;
+    }
+}
+
+@media (max-width: 500px) {
+    .add-item-btn{
+        font-size: 0.6rem!important;
+    }
+}
+
+@media (min-width: 992px) {
+    .price-category{
+        font-size: 0.9rem!important;
+    }
+    .pizza-price {
+        font-size: 30px!important;
+    }
+}
+
+.card-img-top {
+    margin: auto;
+    max-height: fit-content;
+    max-width: fit-content;
+}
+
+.item-card {
+    /* background: url(../../static/images/pattern2.png),linear-gradient(90deg,#525d70 8%,#1c2339 97%); */
+    background: url(../../static/images/pattern3.png),linear-gradient(134deg,#b29693 15%,#362823 100%);
+    /* background-image: url(../../static/images/pattern2.png), linear-gradient(90deg, rgb(82, 93, 112) 8%, rgb(28, 35, 57) 97%); */
+    border-radius: 1rem!important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+    color: #fff;
+}
+
+.item-product-name {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif!important;
+    font-size: 1.3rem!important;
+}
+
+.pizza-price {
+    font-size: 18px;
+    font-weight: 900;
+    color: #4c3017;
+    font-style: italic;
+    padding-bottom: 4px;
+    border-bottom: 2px dotted #202020;
+    width: -webkit-fit-content;
+    width: -moz-fit-content;
+    width: fit-content;
+    margin: 0 auto 1.5rem;
+}

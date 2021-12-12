@@ -1,0 +1,10 @@
+@media (min-width: 768px) {
+    .track-order{
+        width: 60%!important;
+        margin: auto;
+    }
+}
+.track-order{
+    width: 100%;
+    margin: auto;
+}
