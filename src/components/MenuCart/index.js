@@ -42,16 +42,23 @@ export class MenuCart extends Component {
     }
 
     checkOut = async () => {
-        const user = window.localStorage.getItem("user")
+        const user = JSON.parse(window.localStorage.getItem("user"))
         if (window.location.pathname !== "/Order") {
-            if (this.context.total_quantity > 0) window.location.pathname = "/Order"
+            if (this.context.total_quantity > 0 && user != null && user.role !== "staff") window.location.pathname = "/Order"
             else if (user == null) {
                 this.onChangeState(this.state.alert, {
                     message: "Vui lòng đăng nhập để thanh toán",
                     severity: "error",
                     isOpen: true
                 })
-            } else {
+            } else if (user.role === "staff") {
+                this.onChangeState(this.state.alert, {
+                    message: "Đăng nhập tài khoản người dùng để thanh toán",
+                    severity: "error",
+                    isOpen: true
+                })
+            }
+            else {
                 this.onChangeState(this.state.alert, {
                     message: "Thêm sản phẩm vào giỏ để thanh toán",
                     severity: "error",

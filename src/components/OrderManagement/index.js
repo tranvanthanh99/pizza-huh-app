@@ -16,12 +16,18 @@ import {
     TableBody,
     TableRow
 } from '@material-ui/core'
+import IconButton from '@material-ui/core/IconButton';
+import DoneOutlineRoundedIcon from '@material-ui/icons/DoneOutlineRounded';
+import RevertIcon from "@material-ui/icons/NotInterestedOutlined";
+import EditRoundedIcon from '@material-ui/icons/EditRounded';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import CheckCircleOutlineRoundedIcon from '@material-ui/icons/CheckCircleOutlineRounded';
 import OrderHistory from '../OrderHistory';
 import { CustomizedSnackbars } from '../MenuCart'
-import { acceptOrder, updateOrder } from '../../action/order'
+import { acceptOrder, updateOrder, declineOrder } from '../../action/order'
+import DeclineOrderModal from './DeclineOrderModal'
+import EditProductTable from './EditProductTable'
 
 export class OrderManagement extends Component {
 
@@ -78,6 +84,27 @@ export class OrderManagement extends Component {
         else {
             this.onChangeState(this.state.alert, {
                 message: "Nhận đơn Thất bại",
+                severity: "error",
+                isOpen: true
+            })
+        }
+        this.onChangeState({ loading: false })
+        this.onChangeState({ currentOrder: {} })
+    }
+
+    onDeclineOrder = async (order_id) => {
+        this.onChangeState({ loading: true })
+        const res = await declineOrder(order_id)
+        if (res.success) {
+            this.onChangeAlert({
+                message: "Hủy đơn thành công",
+                severity: "success",
+                isOpen: true
+            })
+        }
+        else {
+            this.onChangeState(this.state.alert, {
+                message: "Hủy đơn Thất bại",
                 severity: "error",
                 isOpen: true
             })
@@ -205,8 +232,13 @@ export class OrderManagement extends Component {
                                     :
                                     <CurrentOrder
                                         orderInfo={this.state.currentOrder}
+                                        editOrder={this.getCurrentOrder}
                                         acceptOrder={{
                                             accept: this.onAcceptOrder,
+                                            loading: this.state.alert.isOpen || this.state.loading
+                                        }}
+                                        declineOrder={{
+                                            decline: this.onDeclineOrder,
                                             loading: this.state.alert.isOpen || this.state.loading
                                         }}
                                         completeOrder={this.onCompleteOrder}
@@ -225,13 +257,29 @@ export default OrderManagement
 
 
 function CurrentOrder(props) {
-    const { orderInfo, acceptOrder, completeOrder } = props
+    const { orderInfo, acceptOrder, declineOrder, completeOrder, editOrder } = props
     const [prepTime, setPrepTime] = useState("")
     const [progressTime, setprogressTime] = useState("")
     const prepTimeRef = useRef(prepTime)
     prepTimeRef.current = prepTime
     const progressTimeRef = useRef(progressTime)
     progressTimeRef.current = progressTime
+    const [isOrderEdit, setIsOrderEdit] = useState(false)
+    const [editItemList, setEditItemList] = useState(JSON.parse(JSON.stringify(orderInfo.item_list)))
+
+    const acceptItemChange = () => {
+        const total_quantity = editItemList.reduce((tol, cur) => {
+            return tol + cur.quantity
+        }, 0)
+        const total_price = editItemList.reduce((tol, cur) => {
+            return tol + (cur.quantity * cur.price)
+        }, 0)
+        editOrder(Object.assign(orderInfo, {
+            total_price,
+            total_quantity,
+            item_list: editItemList
+        }))
+    }
 
     const millisToMinutesAndSeconds = (millis) => {
         var minutes = Math.floor(millis / 60000);
@@ -262,7 +310,7 @@ function CurrentOrder(props) {
             clearInterval(progressTimer)
         };
     }, [orderInfo]);
-    
+
     return (
         <Paper className="p-3">
             <Typography variant="h5" display="block" align="center">THÔNG TIN ĐƠN HÀNG</Typography>
@@ -317,8 +365,60 @@ function CurrentOrder(props) {
             <Divider className="mt-3 mb-3" light />
             <Typography variant="h6" gutterBottom component="div">
                 Chi tiết đơn hàng
+                {
+                    isOrderEdit
+                        ?
+                        <>
+                            <IconButton
+                                className="float-right"
+                                aria-label="delete"
+                                size="medium"
+                                color="secondary"
+                                onClick={() => {
+                                    setEditItemList(JSON.parse(JSON.stringify(orderInfo.item_list)))
+                                    setIsOrderEdit(false)
+                                }}
+                            >
+                                <RevertIcon fontSize="small" />
+                            </IconButton>
+                            <IconButton
+                                className="float-right"
+                                aria-label="delete"
+                                size="medium"
+                                style={{ color: "green" }}
+                                onClick={() => {
+                                    acceptItemChange()
+                                    setIsOrderEdit(false)
+                                }}
+                            >
+                                <DoneOutlineRoundedIcon fontSize="small" />
+                            </IconButton>
+                        </>
+                        :
+                        <>
+                            {
+                                orderInfo.status === "Chờ duyệt" &&
+                                <IconButton
+                                    className="float-right"
+                                    aria-label="delete"
+                                    size="medium"
+                                    color="primary"
+                                    onClick={() => setIsOrderEdit(true)}
+                                >
+                                    <EditRoundedIcon fontSize="small" />
+                                </IconButton>
+                            }
+                        </>
+                }
             </Typography>
-            <ProductTable item_list={orderInfo.item_list} />
+            {
+                isOrderEdit
+                    ?
+                    <EditProductTable itemList={editItemList} editItemList={setEditItemList} />
+                    :
+                    <ProductTable item_list={orderInfo.item_list} />
+            }
+
             {
                 orderInfo.status === "Đang thực hiện" &&
                 <>
@@ -393,14 +493,16 @@ function CurrentOrder(props) {
                 orderInfo.status === "Chờ duyệt" &&
                 <>
                     <Divider className="mt-3 mb-2" light />
-                    <div className="text-center">
+                    <div className="d-flex justify-content-center">
                         <Button
+                            className="mr-1"
                             variant="contained"
                             color="primary"
                             style={{ background: "green" }}
                             onClick={() => acceptOrder.accept(orderInfo.id)}
                             disabled={acceptOrder.loading}
                         >Nhận đơn</Button>
+                        <DeclineOrderModal declineOrder={declineOrder} orderInfo={orderInfo} />
                     </div>
                 </>
             }

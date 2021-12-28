@@ -52,6 +52,18 @@ export const acceptOrder = async (order_id) => {
     }
 }
 
+export const declineOrder = async (order_id) => {
+    const res = await axios.get(`${hostURL}/decline-order/${order_id}`);
+    if (res.status === 200) {
+        return {
+            ...res.data,
+            success: true
+        }
+    } else {
+        return { success: false }
+    }
+}
+
 export const updateOrder = async (order_id, state) => {
     const res = await axios.post(`${hostURL}/update-order`, {
         order_id, state

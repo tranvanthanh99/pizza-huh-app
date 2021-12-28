@@ -162,7 +162,7 @@ class ModalLogin extends Component {
                                         helperText={this.state.isEmailWrong && "Email không hợp lệ"}
                                         variant="outlined"
                                         type="email"
-                                        placeholder="Email"
+                                        placeholder="Email *"
                                         value={this.state.email}
                                         onChange={e => this.onChangeState({
                                             email: e.target.value,
@@ -178,7 +178,7 @@ class ModalLogin extends Component {
                                         label={<LockIcon fontSize="small" />}
                                         helperText={!this.state.isDone && "Sai mật khẩu"}
                                         variant="outlined"
-                                        placeholder="Mật Khẩu"
+                                        placeholder="Mật Khẩu *"
                                         type="password"
                                         value={this.state.password}
                                         onChange={e => this.onChangeState({

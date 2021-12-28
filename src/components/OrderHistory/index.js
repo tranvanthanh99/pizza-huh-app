@@ -58,7 +58,7 @@ function Row(props) {
                 <TableCell
                     align="right"
                     style={{
-                        color: row.status === "Chờ duyệt" ? "rgb(250, 173, 20)" : (row.status === "Đã hoàn thành" ? "green" : "red"),
+                        color: row.status === "Chờ duyệt" ? "rgb(250, 173, 20)" : (row.status === "Đã hoàn thành" ? "green" : (row.status === "Đã hủy" ? "gray" : "red")),
                         whiteSpace: "nowrap"
                     }}
                 >{row.status}</TableCell>

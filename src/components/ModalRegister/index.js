@@ -144,6 +144,7 @@ class ModalRegister extends Component {
     validateInput = () => {
         let errors = {}
         if (this.state.fields.password.trim() === "") errors["password"] = "vui lòng nhập mật khẩu"
+        if (this.state.fields.confirmPassword.trim() === "") errors["confirmPassword"] = "vui lòng nhập mật khẩu"
         if (this.state.fields.firstname.trim() === "") errors["firstname"] = "vui lòng nhập tên"
         if (this.state.fields.lastname.trim() === "") errors["lastname"] = "vui lòng nhập họ"
         if (this.state.fields.phone.trim() === "") errors["phone"] = "vui lòng nhập số điện thoại"
@@ -153,6 +154,7 @@ class ModalRegister extends Component {
 
     isValid = () => {
         if (this.state.errors.password != null) return false
+        if (this.state.errors.confirmPassword != null) return false
         if (this.state.errors.firstname != null) return false
         if (this.state.errors.lastname != null) return false
         if (this.state.errors.phone != null) return false
@@ -184,7 +186,7 @@ class ModalRegister extends Component {
                                         fullWidth
                                         error={!this.state.fields.isDone}
                                         id="Email"
-                                        label="Email"
+                                        label="Email *"
                                         helperText={!this.state.fields.isDone && "Email đã tồn tại hoặc không hợp lệ"}
                                         variant="outlined"
                                         type="email"
@@ -200,7 +202,7 @@ class ModalRegister extends Component {
                                         fullWidth
                                         error={this.state.errors.password != null}
                                         id="Password"
-                                        label="Mật khẩu"
+                                        label="Mật khẩu *"
                                         helperText={this.state.errors.password}
                                         variant="outlined"
                                         type="password"
@@ -220,7 +222,7 @@ class ModalRegister extends Component {
                                         fullWidth
                                         error={this.state.fields.confirmPassword !== this.state.fields.password}
                                         id="Confirm-password"
-                                        label="Xác nhận mật khẩu"
+                                        label="Xác nhận mật khẩu *"
                                         helperText={this.state.fields.confirmPassword !== this.state.fields.password && "mật khẩu không hợp lệ"}
                                         variant="outlined"
                                         type="password"
@@ -235,7 +237,7 @@ class ModalRegister extends Component {
                                         fullWidth
                                         error={this.state.errors.phone != null}
                                         id="Phone"
-                                        label="Điện thoại"
+                                        label="Điện thoại *"
                                         helperText={this.state.errors.phone}
                                         variant="outlined"
                                         type="number"
@@ -255,7 +257,7 @@ class ModalRegister extends Component {
                                         fullWidth
                                         error={this.state.errors.firstname != null}
                                         id="First-name"
-                                        label="Tên"
+                                        label="Tên *"
                                         helperText={this.state.errors.firstname}
                                         variant="outlined"
                                         value={this.state.fields.firstname}
@@ -274,7 +276,7 @@ class ModalRegister extends Component {
                                         fullWidth
                                         error={this.state.errors.lastname != null}
                                         id="Last-name"
-                                        label="Họ"
+                                        label="Họ *"
                                         helperText={this.state.errors.lastname}
                                         variant="outlined"
                                         value={this.state.fields.lastname}
@@ -293,7 +295,7 @@ class ModalRegister extends Component {
                                         fullWidth
                                         error={this.state.errors.address != null}
                                         id="outlined-error-helper-text"
-                                        label="Địa chỉ giao hàng"
+                                        label="Địa chỉ giao hàng *"
                                         helperText={this.state.errors.address}
                                         variant="outlined"
                                         value={this.state.fields.address}

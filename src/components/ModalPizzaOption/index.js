@@ -245,7 +245,7 @@ export default function ModalPizzaOption(props) {
                                     name="position"
                                     defaultValue="top"
                                     onChange={e => {
-                                        const newAmount = e.target.value === "Viền phô mai" ? 45000 : -45000
+                                        const newAmount = e.target.value === "Viền phô mai" ? 45000 : (item.option.includes("Viền phô mai") ? -45000 : 0)
                                         onItemChange({
                                             option: e.target.value !== "Bỏ chọn" ? [...item.option.filter((item) => item !== "Viền phô mai"), e.target.value] : [...item.option.filter((item) => item !== "Viền phô mai")],
                                             price: item.price + newAmount,

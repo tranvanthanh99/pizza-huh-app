@@ -3,12 +3,15 @@ import {
     Collapse,
     Navbar,
     NavbarToggler,
-    NavbarBrand,
+    // NavbarBrand,
     Nav,
     NavItem,
-    NavLink,
+    // NavLink,
     NavbarText
 } from 'reactstrap'
+import {
+    NavLink,
+} from 'react-router-dom';
 import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
@@ -54,6 +57,7 @@ class NavBar extends Component {
 
     logout = () => {
         window.localStorage.removeItem("user")
+        window.localStorage.removeItem("cart")
         this.onChangeState({
             user: null
         })
@@ -79,20 +83,20 @@ class NavBar extends Component {
             <>
                 <Navbar color="light" light expand="lg" sticky="top">
                     <div className="container" >
-                        <NavbarBrand href="/" className="mr-auto">
+                        <NavLink to="/" className="mr-auto navbar-brand">
                             <img src={logo} alt="logo" style={{ width: "40px", height: "auto" }} />
-                        </NavbarBrand>
+                        </NavLink>
 
                         <Nav className="d-lg-none mr-3">
                             <NavItem>
-                                <NavLink href="/Tracking" style={{ maxHeight: "40px", width: "auto" }}>
+                                <NavLink className="nav-link" to="/Tracking" style={{ maxHeight: "40px", width: "auto" }}>
                                     <IconButton aria-label="show 11 new notifications" size="small" color="inherit">
                                         <span className="fas fa-shipping-fast"></span>
                                     </IconButton>
                                 </NavLink>
                             </NavItem>
                             <NavItem>
-                                <NavLink href="/Cart" style={{ maxHeight: "40px", width: "auto" }}>
+                                <NavLink className="nav-link" to="/Cart" style={{ maxHeight: "40px", width: "auto" }}>
                                     {/* <div style={{ position: "relative" }}>
                                         <span className="fas fa-shopping-bag"></span>
                                         <span className="count">0</span>
@@ -113,7 +117,11 @@ class NavBar extends Component {
                                         <>
                                             <NavItem style={{ display: "flex" }}>
                                                 <NavItem tag="div">
-                                                    <NavLink onClick={() => window.location.pathname = '/Profile'}>
+                                                    {/* <NavLink className="nav-link" style={{textDecoration:"underline"}} onClick={() => window.location.pathname = '/Profile'}>
+                                                        <strong>Xin chào:</strong>
+                                                        {` ${this.state.user.lastname} ${this.state.user.firstname}`}
+                                                    </NavLink> */}
+                                                    <NavLink className="nav-link" to="/Profile" style={{textDecoration:"underline"}} >
                                                         <strong>Xin chào:</strong>
                                                         {` ${this.state.user.lastname} ${this.state.user.firstname}`}
                                                     </NavLink>
@@ -122,20 +130,20 @@ class NavBar extends Component {
                                                     <NavbarText>/</NavbarText>
                                                 </NavItem>
                                                 <NavItem tag="div">
-                                                    <NavLink onClick={() => this.logout()}>Đăng xuất</NavLink>
+                                                    <NavLink className="nav-link" to="#" onClick={() => this.logout()}>Đăng xuất</NavLink>
                                                 </NavItem>
                                             </NavItem>
                                         </>
                                         :
                                         <>
                                             <NavItem>
-                                                <NavLink onClick={() => this.onChangeState({ isModalRegisterOpen: true })}>Đăng Ký</NavLink>
+                                                <NavLink className="nav-link" to="#" onClick={() => this.onChangeState({ isModalRegisterOpen: true })}>Đăng Ký</NavLink>
                                             </NavItem>
                                             <NavItem className="d-none d-lg-block">
                                                 <NavbarText>/</NavbarText>
                                             </NavItem>
                                             <NavItem>
-                                                <NavLink onClick={() => this.onChangeState({ isModalLoginOpen: true })}>Đăng nhập</NavLink>
+                                                <NavLink className="nav-link" to="#" onClick={() => this.onChangeState({ isModalLoginOpen: true })}>Đăng nhập</NavLink>
                                             </NavItem>
                                         </>
 
@@ -143,17 +151,17 @@ class NavBar extends Component {
                                 {
                                     this.checkUserRole() &&
                                     <NavItem>
-                                        <NavLink href="/OrderManagement">Quản lý đơn hàng</NavLink>
+                                        <NavLink className="nav-link" to="/OrderManagement">Quản lý đơn hàng</NavLink>
                                     </NavItem>
                                 }
                                 <NavItem>
-                                    <NavLink href="/Menu">Thực đơn</NavLink>
+                                    <NavLink className="nav-link" to="/Menu">Thực đơn</NavLink>
                                 </NavItem>
                                 <NavItem className="d-none d-lg-block">
-                                    <NavLink href="/Tracking">Theo dõi đơn hàng</NavLink>
+                                    <NavLink className="nav-link" to="/Tracking">Theo dõi đơn hàng</NavLink>
                                 </NavItem>
                                 <NavItem className="d-none d-lg-block mr-1">
-                                    <NavLink href="/Cart" style={{ maxHeight: "40px", width: "auto" }}>
+                                    <NavLink className="nav-link" to="/Cart" style={{ maxHeight: "40px", width: "auto" }}>
                                         <IconButton aria-label="show 11 new notifications" size="small" color="inherit">
                                             <Badge badgeContent={total_quantity} color="secondary">
                                                 <ShoppingCartIcon />
