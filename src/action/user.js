@@ -8,7 +8,10 @@ export const register = async (email, password, firstname, lastname, phone, addr
     if(res.status === 200) {
         return res.data
     } else {
-        return null
+        return {
+            ...res.data,
+            success: false,
+        }
     }
 }
 

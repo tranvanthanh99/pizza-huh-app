@@ -92,7 +92,7 @@ class ModalRegister extends Component {
     onRegister = async () => {
         this.toggleLoading();
         setTimeout(async () => {
-            let res
+            let res = null
             this.validateInput()
             if (this.isValid()) {
                 res = await register(
@@ -103,13 +103,17 @@ class ModalRegister extends Component {
                     this.state.fields.phone,
                     this.state.fields.address
                 )
-                if (res != null) setTimeout(() => this.onToggle(), 1500)
+                if (res.success) setTimeout(() => this.onToggle(), 1500)
             }
             this.toggleLoading();
-            this.onChangeState(this.state.fields, {
-                isDone: res != null ? true : false
-            })
-
+            if (res != null) {
+                this.onChangeState(this.state.fields, {
+                    isDone: res.success ? true : false
+                })
+                this.onChangeState(this.state.errors, {
+                    email: !res.success ? "Email đã tồn tại hoặc không hợp lệ" : null
+                })
+            }
 
         }, 500);
     };
@@ -143,8 +147,10 @@ class ModalRegister extends Component {
 
     validateInput = () => {
         let errors = {}
+        if (this.state.fields.email.trim() === "") errors["email"] = "vui lòng nhập email"
         if (this.state.fields.password.trim() === "") errors["password"] = "vui lòng nhập mật khẩu"
         if (this.state.fields.confirmPassword.trim() === "") errors["confirmPassword"] = "vui lòng nhập mật khẩu"
+        if (this.state.fields.confirmPassword !== this.state.fields.password) errors["confirmPassword"] = "mật khẩu không hợp lệ"
         if (this.state.fields.firstname.trim() === "") errors["firstname"] = "vui lòng nhập tên"
         if (this.state.fields.lastname.trim() === "") errors["lastname"] = "vui lòng nhập họ"
         if (this.state.fields.phone.trim() === "") errors["phone"] = "vui lòng nhập số điện thoại"
@@ -180,21 +186,29 @@ class ModalRegister extends Component {
                             {
                                 this.state.fields.isDone === true && <Alert className="mb-3" color="success">Tạo tài khoản thành công</Alert>
                             }
+                            {
+                                this.state.fields.isDone === false && <Alert className="mb-3" color="error">Tạo tài khoản thất bại</Alert>
+                            }
                             <Row>
                                 <Col className="mb-3" sm={12}>
                                     <TextField
                                         fullWidth
-                                        error={!this.state.fields.isDone}
+                                        error={this.state.errors.email != null}
                                         id="Email"
                                         label="Email *"
-                                        helperText={!this.state.fields.isDone && "Email đã tồn tại hoặc không hợp lệ"}
+                                        helperText={this.state.errors.email}
                                         variant="outlined"
                                         type="email"
                                         value={this.state.fields.email}
-                                        onChange={e => this.onChangeState(this.state.fields, {
+                                        onChange={e => {
+                                            this.onChangeState(this.state.fields, {
                                             email: e.target.value,
                                             isDone: 'null'
-                                        })}
+                                            })
+                                            this.onChangeState(this.state.errors, {
+                                                email: null
+                                            })
+                                        }}
                                     />
                                 </Col>
                                 <Col className="mb-3" sm={6}>
