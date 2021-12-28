@@ -202,8 +202,8 @@ class ModalRegister extends Component {
                                         value={this.state.fields.email}
                                         onChange={e => {
                                             this.onChangeState(this.state.fields, {
-                                            email: e.target.value,
-                                            isDone: 'null'
+                                                email: e.target.value,
+                                                isDone: 'null'
                                             })
                                             this.onChangeState(this.state.errors, {
                                                 email: null
@@ -241,9 +241,14 @@ class ModalRegister extends Component {
                                         variant="outlined"
                                         type="password"
                                         value={this.state.fields.confirmPassword}
-                                        onChange={e => this.onChangeState(this.state.fields, {
-                                            confirmPassword: e.target.value
-                                        })}
+                                        onChange={e => {
+                                            this.onChangeState(this.state.fields, {
+                                                confirmPassword: e.target.value
+                                            })
+                                            this.onChangeState(this.state.errors, {
+                                                confirmPassword: null
+                                            })
+                                        }}
                                     />
                                 </Col>
                                 <Col className="mb-3" sm={12}>
