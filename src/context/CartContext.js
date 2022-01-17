@@ -112,11 +112,11 @@ class CartContextProvider extends Component {
             price,
             quantity
         }
-        value = Math.max(Number(0), Math.min(Number(99), Number(value)));
-        if (value === 0) {
-            this.deleteItem(cartItem)
-            return
-        }
+        value = Math.max(Number(1), Math.min(Number(99), Number(value)));
+        // if (value === 0) {
+        //     this.deleteItem(cartItem)
+        //     return
+        // }
 
         const currentItem = this.state.item_list.reduce((tol, cur) => {
             if (JSON.stringify(cur) === JSON.stringify(cartItem)) return cur

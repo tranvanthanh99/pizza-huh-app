@@ -1,4 +1,4 @@
-import React, { useState,  useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -18,6 +18,7 @@ import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import { hostURLStatic } from '../../config'
 import { CartContext } from '../../context/CartContext'
+import Checkbox from '@material-ui/core/Checkbox';
 
 const styles = (theme) => ({
     root: {
@@ -82,7 +83,7 @@ export default function ModalPizzaOption(props) {
         else return `Cỡ ${value} - 12 inch`
     })
     const displayCrust = ["Đế mỏng", "Đế vừa", "Đế dày"]
-    const displayCheese = ["Thêm phô mai", "Gấp đôi phô mai", "Gấp ba phô mai", "Bỏ chọn"]
+    const displayCheese = ["Thêm phô mai", "Gấp đôi phô mai", "Gấp ba phô mai"]
 
     const onItemChange = object => {
         setItem(item => Object.assign({ ...item }, object))
@@ -167,7 +168,7 @@ export default function ModalPizzaOption(props) {
                         <Grid className="pl-2" xs={12} md={7} item>
                             <FormControl required className="d-block" error={error.size !== ""} component="fieldset">
                                 <FormLabel component="legend">Chọn cỡ bánh</FormLabel>
-                                <FormHelperText>{error.size}</FormHelperText>
+                                <FormHelperText>{error.size !== "" ? error.size : (item.size === "nhỏ" ? `${props.price-130000} ₫` : (item.size === "vừa" ? `${props.price-60000} ₫` : `${props.price} ₫`))}</FormHelperText>
                                 <RadioGroup
                                     row
                                     aria-label="position"
@@ -213,7 +214,7 @@ export default function ModalPizzaOption(props) {
                                 <FormHelperText className="m-0">
                                     {item.option.includes("Thêm phô mai") ? "Thêm: 15.000 ₫" : (item.option.includes("Gấp đôi phô mai") ? "Thêm: 25.000 ₫" : (item.option.includes("Gấp ba phô mai") ? "Thêm: 35.000 ₫" : "Thêm: 0 ₫"))}
                                 </FormHelperText>
-                                <RadioGroup
+                                {/* <RadioGroup
                                     row
                                     aria-label="position"
                                     name="position"
@@ -232,14 +233,37 @@ export default function ModalPizzaOption(props) {
                                             <FormControlLabel key={value} value={value} control={<Radio color="primary" onChange={e => !e.target.check} />} label={value} />
                                         ))
                                     }
-                                </RadioGroup>
+                                </RadioGroup> */}
+                                {
+                                    displayCheese.map((value) => (
+                                        <FormControlLabel
+                                            value={value}
+                                            control={
+                                                <Checkbox
+                                                    color="primary"
+                                                    checked={item.option.includes(value)}
+                                                    onChange={e => {
+                                                        const newAmount = e.target.checked ? (e.target.value === "Thêm phô mai" ? 15000 : (e.target.value === "Gấp đôi phô mai" ? 25000 : (e.target.value === "Gấp ba phô mai" ? 35000 : 0))) : 0;
+                                                        onItemChange({
+                                                            option: e.target.checked ? [...item.option.filter((item) => !displayCheese.includes(item)), e.target.value] : [...item.option.filter((item) => !displayCheese.includes(item))],
+                                                            price: item.price + (newAmount - item.extraPrice) + (item.option.includes("Viền phô mai") ? 45000 : 0),
+                                                            extraPrice: newAmount + (item.option.includes("Viền phô mai") ? 45000 : 0)
+                                                        })
+                                                    }}
+                                                />
+                                            }
+                                            label={value}
+                                            labelPlacement="end"
+                                        />
+                                    ))
+                                }
                             </FormControl>
                             <FormControl className="d-block" component="fieldset">
                                 <FormLabel component="legend">Tùy chọn viền</FormLabel>
                                 <FormHelperText className="m-0">
                                     {item.option.includes("Viền phô mai") ? "Thêm: 45.000 ₫" : "Thêm: 0 ₫"}
                                 </FormHelperText>
-                                <RadioGroup
+                                {/* <RadioGroup
                                     row
                                     aria-label="position"
                                     name="position"
@@ -255,7 +279,26 @@ export default function ModalPizzaOption(props) {
                                 >
                                     <FormControlLabel value="Viền phô mai" control={<Radio color="primary" />} label="Viền phô mai" />
                                     <FormControlLabel value="Bỏ chọn" control={<Radio color="primary" />} label="Bỏ chọn" />
-                                </RadioGroup>
+                                </RadioGroup> */}
+                                <FormControlLabel
+                                    value="Viền phô mai"
+                                    control={
+                                        <Checkbox
+                                            color="primary"
+                                            checked={item.option.includes("Viền phô mai")}
+                                            onChange={e => {
+                                                const newAmount = e.target.checked ? 45000 : -45000
+                                                onItemChange({
+                                                    option: e.target.checked ? [...item.option.filter((item) => item !== "Viền phô mai"), e.target.value] : [...item.option.filter((item) => item !== "Viền phô mai")],
+                                                    price: item.price + newAmount,
+                                                    extraPrice: newAmount + item.extraPrice
+                                                })
+                                            }}
+                                        />
+                                    }
+                                    label="Viền phô mai"
+                                    labelPlacement="end"
+                                />
                             </FormControl>
                         </Grid>
                     </Grid>

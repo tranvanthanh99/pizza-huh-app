@@ -24,10 +24,11 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import CheckCircleOutlineRoundedIcon from '@material-ui/icons/CheckCircleOutlineRounded';
 import OrderHistory from '../OrderHistory';
-import { CustomizedSnackbars } from '../MenuCart'
-import { acceptOrder, updateOrder, declineOrder } from '../../action/order'
 import DeclineOrderModal from './DeclineOrderModal'
 import EditProductTable from './EditProductTable'
+import { CustomizedSnackbars } from '../MenuCart'
+import { acceptOrder, updateOrder, declineOrder } from '../../action/order'
+import { updateOrderInfo } from '../../action/order';
 
 export class OrderManagement extends Component {
 
@@ -232,7 +233,10 @@ export class OrderManagement extends Component {
                                     :
                                     <CurrentOrder
                                         orderInfo={this.state.currentOrder}
-                                        editOrder={this.getCurrentOrder}
+                                        editOrder={{ 
+                                            edit: this.getCurrentOrder,
+                                            onAlert: this.onChangeAlert
+                                        }}
                                         acceptOrder={{
                                             accept: this.onAcceptOrder,
                                             loading: this.state.alert.isOpen || this.state.loading
@@ -267,18 +271,34 @@ function CurrentOrder(props) {
     const [isOrderEdit, setIsOrderEdit] = useState(false)
     const [editItemList, setEditItemList] = useState(JSON.parse(JSON.stringify(orderInfo.item_list)))
 
-    const acceptItemChange = () => {
+    const acceptItemChange = async () => {
         const total_quantity = editItemList.reduce((tol, cur) => {
             return tol + cur.quantity
         }, 0)
         const total_price = editItemList.reduce((tol, cur) => {
             return tol + (cur.quantity * cur.price)
         }, 0)
-        editOrder(Object.assign(orderInfo, {
+        editOrder.edit(Object.assign(orderInfo, {
             total_price,
             total_quantity,
             item_list: editItemList
         }))
+        const { id, ...info } = orderInfo;
+        const res = await updateOrderInfo(id, info)
+        if (res.success) {
+            editOrder.onAlert({
+                message: "cập nhật đơn thành công",
+                severity: "success",
+                isOpen: true
+            })
+        }
+        else {
+            editOrder.onAlert({
+                message: "cập nhật đơn Thất bại",
+                severity: "error",
+                isOpen: true
+            })
+        }
     }
 
     const millisToMinutesAndSeconds = (millis) => {

@@ -150,14 +150,14 @@ export default function OrderHistory(props) {
         setPage(0);
     };
 
+    const fetchOrder = async () => {
+        const user = JSON.parse(window.localStorage.getItem("user"))
+        let res
+        if (window.location.pathname === "/Profile") res = await getUserOrder(user.user_id)
+        else res = await getOrder(orderInfo.status)
+        if (res.success) setOrder(res.order_list.reverse())
+    }
     useEffect(() => {
-        const fetchOrder = async () => {
-            const user = JSON.parse(window.localStorage.getItem("user"))
-            let res
-            if (window.location.pathname === "/Profile") res = await getUserOrder(user.user_id)
-            else res = await getOrder(orderInfo.status)
-            if (res.success) setOrder(res.order_list.reverse())
-        }
         fetchOrder()
     }, [orderInfo])
 

@@ -78,6 +78,20 @@ export const updateOrder = async (order_id, state) => {
     }
 }
 
+export const updateOrderInfo = async (order_id, info) => {
+    const res = await axios.post(`${hostURL}/update-order-info`, {
+        order_id, info
+    });
+    if (res.status === 200) {
+        return {
+            ...res.data,
+            success: true
+        }
+    } else {
+        return { success: false }
+    }
+}
+
 export const trackOrder = async (phone) => {
     const res = await axios.get(`${hostURL}/track-order/${phone}`);
     if (res.status === 200) {

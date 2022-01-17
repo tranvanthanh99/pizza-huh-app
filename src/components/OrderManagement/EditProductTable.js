@@ -36,13 +36,13 @@ export default function EditProductTable(props) {
                         <TableCell align="right">Số lượng</TableCell>
                         <TableCell align="right">Giá</TableCell>
                         <TableCell align="right">
-                            <MenuItemModal />
+                            <MenuItemModal itemList={itemList} editItemList={editItemList}/>
                         </TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {itemList.map((historyRow, index) => (
-                        <TableRow key={historyRow.name}>
+                        <TableRow key={historyRow.name + index}>
                             <TableCell component="th" scope="row">
                                 {historyRow.name + " " + modifyData(historyRow.size)}
                             </TableCell>
